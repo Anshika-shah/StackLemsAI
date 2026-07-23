@@ -1,0 +1,6 @@
+{
+  "name": "StackLens AI",
+  "description": "Autonomous Software Engineering Investigation Platform to understand, debug, analyze, and optimize software projects through intelligent AI evidence collection, root cause reasoning, architectural dependency mapping, and structured reporting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

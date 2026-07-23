@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-primary: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-card: #ffffff;
+    --bg-input: #f1f5f9;
+    --border-color: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-muted: #64748b;
+    --accent-primary: #6366f1;
+    --accent-hover: #4f46e5;
+    --accent-ring: #818cf8;
+  }
+
+  .dark {
+    --bg-primary: #0a0a0c;
+    --bg-surface: #0f0f12;
+    --bg-card: #121217;
+    --bg-input: #181820;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --text-primary: #e0e0e0;
+    --text-muted: #8e8e9e;
+  }
+
+  .amoled {
+    --bg-primary: #000000;
+    --bg-surface: #0a0a0a;
+    --bg-card: #101014;
+    --bg-input: #16161c;
+    --border-color: rgba(255, 255, 255, 0.12);
+    --text-primary: #ffffff;
+    --text-muted: #a3a3a3;
+  }
+
+  .high-contrast {
+    --bg-primary: #000000;
+    --bg-surface: #121212;
+    --bg-card: #1a1a1a;
+    --bg-input: #262626;
+    --border-color: #ffff00;
+    --text-primary: #ffffff;
+    --text-muted: #e5e5e5;
+    --accent-primary: #ffff00;
+    --accent-hover: #e6e600;
+    --accent-ring: #ffff80;
+  }
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.custom-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+.custom-input {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.custom-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
