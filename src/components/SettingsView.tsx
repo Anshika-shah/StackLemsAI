@@ -1,16 +1,23 @@
 import React from 'react';
 import { 
   Settings, Moon, Sun, Monitor, Palette, Sparkles, Sliders, 
-  ShieldCheck, User, Check, RefreshCw, Key
+  ShieldCheck, User, Check, RefreshCw, Key, LogOut, UserPlus, LogIn
 } from 'lucide-react';
 import { UserProfile, ThemeMode, AccentColor, ExplanationMode, ResponseStyle, UserRole } from '../types';
 
 interface SettingsViewProps {
   currentUser: UserProfile;
   onUpdateUser: (updatedUser: UserProfile) => void;
+  onLogout?: () => void;
+  onOpenAuth?: (tab?: 'login' | 'register') => void;
 }
 
-export const SettingsView: React.FC<SettingsViewProps> = ({ currentUser, onUpdateUser }) => {
+export const SettingsView: React.FC<SettingsViewProps> = ({ 
+  currentUser, 
+  onUpdateUser,
+  onLogout,
+  onOpenAuth,
+}) => {
   const handleThemeChange = (theme: ThemeMode) => {
     onUpdateUser({
       ...currentUser,
@@ -51,7 +58,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ currentUser, onUpdat
   };
 
   return (
-    <div className="p-6 space-y-6 max-w-5xl mx-auto">
+    <div className="p-6 space-y-6 max-w-5xl mx-auto pb-12">
       {/* Header */}
       <div>
         <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-indigo-400 mb-1">
@@ -64,6 +71,53 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ currentUser, onUpdat
         <p className="text-xs text-[var(--text-muted)] mt-0.5">
           Configure preferred Gemini AI model, investigation response depth, RBAC role, and visual theme settings.
         </p>
+      </div>
+
+      {/* Account & Session Management */}
+      <div className="custom-card p-6 space-y-4 border-indigo-500/20 bg-indigo-500/5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="font-bold text-base flex items-center space-x-2 text-[var(--text-primary)]">
+              <User className="w-5 h-5 text-indigo-400" />
+              <span>User Account & Active Session</span>
+            </h3>
+            <p className="text-xs text-[var(--text-muted)] mt-0.5">
+              Signed in as <span className="font-semibold text-indigo-400">{currentUser.name}</span> ({currentUser.email}) • Role: <span className="uppercase font-mono font-bold text-indigo-300">{currentUser.role}</span>
+            </p>
+          </div>
+
+          <div className="flex items-center space-x-2.5 shrink-0">
+            {onOpenAuth && (
+              <button
+                onClick={() => onOpenAuth('login')}
+                className="px-3.5 py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-input)] hover:border-indigo-500 text-xs font-semibold text-[var(--text-primary)] flex items-center space-x-2 transition"
+              >
+                <LogIn className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Switch / Sign In</span>
+              </button>
+            )}
+
+            {onOpenAuth && (
+              <button
+                onClick={() => onOpenAuth('register')}
+                className="px-3.5 py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-input)] hover:border-purple-500 text-xs font-semibold text-[var(--text-primary)] flex items-center space-x-2 transition"
+              >
+                <UserPlus className="w-3.5 h-3.5 text-purple-400" />
+                <span>Register Account</span>
+              </button>
+            )}
+
+            {onLogout && (
+              <button
+                onClick={onLogout}
+                className="px-3.5 py-2 rounded-xl bg-rose-500/15 text-rose-400 hover:bg-rose-500/25 border border-rose-500/30 font-bold text-xs flex items-center space-x-2 transition"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Log Out</span>
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* AI Model Preferences */}
@@ -219,3 +273,4 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ currentUser, onUpdat
     </div>
   );
 };
+

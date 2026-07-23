@@ -1,33 +1,38 @@
 import React, { useState } from 'react';
 import { 
   Search, Shield, Bell, User, Sparkles, Moon, Sun, 
-  ChevronDown, Check, GitBranch, Terminal, RefreshCw
+  ChevronDown, Check, GitBranch, Terminal, RefreshCw, LogIn, LogOut, UserPlus, UserCheck
 } from 'lucide-react';
 import { UserProfile, ProjectRepository, NotificationItem } from '../types';
 
 interface NavbarProps {
   currentUser: UserProfile;
+  isLoggedIn: boolean;
   projects: ProjectRepository[];
   activeProject: ProjectRepository;
   onSelectProject: (proj: ProjectRepository) => void;
   onOpenNewInvestigation: () => void;
-  onOpenAuth: () => void;
+  onOpenAuth: (initialTab?: 'login' | 'register') => void;
+  onLogout: () => void;
   notifications: NotificationItem[];
   onOpenNewRepoModal: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentUser,
+  isLoggedIn,
   projects,
   activeProject,
   onSelectProject,
   onOpenNewInvestigation,
   onOpenAuth,
+  onLogout,
   notifications,
   onOpenNewRepoModal,
 }) => {
   const [showProjMenu, setShowProjMenu] = useState(false);
   const [showNotifMenu, setShowNotifMenu] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -54,7 +59,11 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Project Selector Dropdown */}
         <div className="relative">
           <button
-            onClick={() => setShowProjMenu(!showProjMenu)}
+            onClick={() => {
+              setShowProjMenu(!showProjMenu);
+              setShowNotifMenu(false);
+              setShowUserMenu(false);
+            }}
             className="flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-input)] hover:bg-slate-200 dark:hover:bg-slate-800 transition text-sm font-medium"
           >
             <GitBranch className="w-4 h-4 text-indigo-500" />
@@ -114,7 +123,11 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Notifications */}
         <div className="relative">
           <button
-            onClick={() => setShowNotifMenu(!showNotifMenu)}
+            onClick={() => {
+              setShowNotifMenu(!showNotifMenu);
+              setShowProjMenu(false);
+              setShowUserMenu(false);
+            }}
             className="p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-input)] hover:bg-slate-200 dark:hover:bg-slate-800 transition relative text-[var(--text-primary)]"
           >
             <Bell className="w-4 h-4" />
@@ -146,18 +159,95 @@ export const Navbar: React.FC<NavbarProps> = ({
           )}
         </div>
 
-        {/* User Role Profile */}
-        <button
-          onClick={onOpenAuth}
-          className="flex items-center space-x-2 pl-2 pr-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-input)] hover:bg-slate-200 dark:hover:bg-slate-800 transition text-sm"
-        >
-          <img src={currentUser.avatar} alt={currentUser.name} className="w-6 h-6 rounded-full object-cover ring-1 ring-indigo-500" />
-          <span className="font-medium max-w-[100px] truncate hidden md:inline">{currentUser.name}</span>
-          <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-400 hidden lg:inline">
-            {currentUser.role.replace('_', ' ')}
-          </span>
-        </button>
+        {/* User Role Profile & Auth Menu */}
+        <div className="relative">
+          {isLoggedIn ? (
+            <button
+              onClick={() => {
+                setShowUserMenu(!showUserMenu);
+                setShowProjMenu(false);
+                setShowNotifMenu(false);
+              }}
+              className="flex items-center space-x-2 pl-2 pr-2.5 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-input)] hover:bg-slate-200 dark:hover:bg-slate-800 transition text-sm"
+            >
+              <img src={currentUser.avatar} alt={currentUser.name} className="w-6 h-6 rounded-full object-cover ring-1 ring-indigo-500" />
+              <span className="font-medium max-w-[100px] truncate hidden md:inline">{currentUser.name}</span>
+              <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-400 hidden lg:inline">
+                {currentUser.role.replace('_', ' ')}
+              </span>
+              <ChevronDown className="w-3.5 h-3.5 text-[var(--text-muted)]" />
+            </button>
+          ) : (
+            <button
+              onClick={() => onOpenAuth('login')}
+              className="flex items-center space-x-2 px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-sm transition"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Sign In / Register</span>
+            </button>
+          )}
+
+          {/* User Dropdown Menu */}
+          {showUserMenu && isLoggedIn && (
+            <div className="absolute right-0 mt-2 w-64 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl py-2 z-50 animate-fadeIn">
+              {/* Profile Summary Header */}
+              <div className="px-3.5 py-2.5 border-b border-[var(--border-color)] space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-[var(--text-primary)] truncate">{currentUser.name}</span>
+                  <span className="flex items-center space-x-1 text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>Active</span>
+                  </span>
+                </div>
+                <div className="text-[11px] text-[var(--text-muted)] truncate">{currentUser.email}</div>
+                <div className="text-[10px] text-indigo-400 font-mono uppercase tracking-wider font-semibold">
+                  Role: {currentUser.role.replace('_', ' ')}
+                </div>
+              </div>
+
+              {/* Action Links */}
+              <div className="py-1">
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    onOpenAuth('login');
+                  }}
+                  className="w-full px-3.5 py-2 text-left text-xs font-medium text-[var(--text-primary)] hover:bg-indigo-500/10 flex items-center space-x-2.5 transition"
+                >
+                  <UserCheck className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Switch Account / Sign In</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    onOpenAuth('register');
+                  }}
+                  className="w-full px-3.5 py-2 text-left text-xs font-medium text-[var(--text-primary)] hover:bg-purple-500/10 flex items-center space-x-2.5 transition"
+                >
+                  <UserPlus className="w-3.5 h-3.5 text-purple-400" />
+                  <span>Register New Account</span>
+                </button>
+              </div>
+
+              {/* Logout Option */}
+              <div className="border-t border-[var(--border-color)] pt-1 mt-1">
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    onLogout();
+                  }}
+                  className="w-full px-3.5 py-2 text-left text-xs font-bold text-rose-400 hover:bg-rose-500/10 flex items-center space-x-2.5 transition"
+                >
+                  <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                  <span>Log Out</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
 };
+

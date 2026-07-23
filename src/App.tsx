@@ -23,6 +23,9 @@ import { InvestigationDetailModal } from './components/InvestigationDetailModal'
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<UserProfile>(getStoredUser());
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+    return localStorage.getItem('stacklens_is_logged_in') !== 'false';
+  });
   const [projects, setProjects] = useState<ProjectRepository[]>(getStoredProjects());
   const [activeProject, setActiveProject] = useState<ProjectRepository>(projects[0]);
   const [reports, setReports] = useState<InvestigationReport[]>(getStoredReports());
@@ -33,6 +36,7 @@ export default function App() {
 
   // Modals
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState<'login' | 'register'>('login');
   const [showNewRepoModal, setShowNewRepoModal] = useState(false);
   const [selectedReportForModal, setSelectedReportForModal] = useState<InvestigationReport | null>(null);
 
@@ -41,10 +45,22 @@ export default function App() {
     applyTheme(currentUser.preferences.theme, currentUser.preferences.accentColor);
   }, [currentUser.preferences.theme, currentUser.preferences.accentColor]);
 
-  // Save changes to localStorage
+  // Auth Handlers
   const handleUpdateUser = (updatedUser: UserProfile) => {
     setCurrentUser(updatedUser);
     saveUser(updatedUser);
+    setIsLoggedIn(true);
+    localStorage.setItem('stacklens_is_logged_in', 'true');
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.setItem('stacklens_is_logged_in', 'false');
+  };
+
+  const handleOpenAuth = (initialTab: 'login' | 'register' = 'login') => {
+    setAuthModalTab(initialTab);
+    setShowAuthModal(true);
   };
 
   const handleAddProject = (newProject: ProjectRepository) => {
@@ -70,11 +86,13 @@ export default function App() {
       {/* Top Navigation */}
       <Navbar
         currentUser={currentUser}
+        isLoggedIn={isLoggedIn}
         projects={projects}
         activeProject={activeProject}
         onSelectProject={(p) => setActiveProject(p)}
         onOpenNewInvestigation={() => setActiveTab('investigation')}
-        onOpenAuth={() => setShowAuthModal(true)}
+        onOpenAuth={handleOpenAuth}
+        onLogout={handleLogout}
         notifications={notifications}
         onOpenNewRepoModal={() => setShowNewRepoModal(true)}
       />
@@ -147,6 +165,8 @@ export default function App() {
             <SettingsView
               currentUser={currentUser}
               onUpdateUser={handleUpdateUser}
+              onLogout={handleLogout}
+              onOpenAuth={handleOpenAuth}
             />
           )}
         </main>
@@ -157,7 +177,10 @@ export default function App() {
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         currentUser={currentUser}
+        isLoggedIn={isLoggedIn}
+        initialTab={authModalTab}
         onLoginSuccess={handleUpdateUser}
+        onLogout={handleLogout}
       />
 
       <NewRepoModal
