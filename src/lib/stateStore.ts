@@ -9,7 +9,12 @@ const NOTIFS_KEY = 'stacklens_notifications_v1';
 export function getStoredUser(): UserProfile {
   try {
     const data = localStorage.getItem(USER_KEY);
-    return data ? JSON.parse(data) : mockCurrentUser;
+    if (!data) return mockCurrentUser;
+    const parsed = JSON.parse(data);
+    if (parsed.name === 'Anshika Shah' || parsed.email === 'anshika2004shah@gmail.com') {
+      return mockCurrentUser;
+    }
+    return parsed;
   } catch {
     return mockCurrentUser;
   }

@@ -2,8 +2,8 @@ import { ProjectRepository, UserProfile, InvestigationReport, NotificationItem }
 
 export const mockCurrentUser: UserProfile = {
   id: 'usr_882910',
-  name: 'Anshika Shah',
-  email: 'anshika2004shah@gmail.com',
+  name: 'Alex Morgan',
+  email: 'alex.morgan@company.com',
   role: 'team_lead',
   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
   department: 'Core Platform & Architecture',
@@ -323,7 +323,7 @@ export const mockRecentReports: InvestigationReport[] = [
      next();`,
     relatedComponents: ['API Gateway (Express)', 'Auth Service', 'JWT Token Store'],
     createdAt: '2026-07-23T11:30:00Z',
-    investigatedBy: 'Anshika Shah',
+    investigatedBy: 'Alex Morgan',
     sharedWithTeam: true,
   },
   {

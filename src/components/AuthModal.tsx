@@ -62,7 +62,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const handleOAuthLogin = (provider: 'google' | 'github') => {
     const updatedUser: UserProfile = {
       ...currentUser,
-      name: provider === 'google' ? 'Anshika Shah (Google)' : 'anshikashah (GitHub)',
+      name: provider === 'google' ? 'Alex Morgan (Google)' : 'alexmorgan (GitHub)',
       email: currentUser.email || 'user@company.com',
     };
     onLoginSuccess(updatedUser);
@@ -158,7 +158,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Anshika Shah"
+                placeholder="e.g. Alex Morgan"
                 required
                 className="w-full custom-input p-2.5 rounded-lg text-xs"
               />
