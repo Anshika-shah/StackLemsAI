@@ -83,7 +83,7 @@ Recommendations
 Displays overall project health, active investigations, confidence scores, and AI-generated summaries.
 
 <p align="center">
-<img src="screenshots/dashboard.png" width="100%">
+<img src="dashboard.png" width="100%">
 </p>
 
 ---
@@ -93,7 +93,7 @@ Displays overall project health, active investigations, confidence scores, and A
 Start autonomous investigations by describing an issue or uploading runtime logs.
 
 <p align="center">
-<img src="screenshots/investigation-studio.png" width="100%">
+<img src="investigation-studio.png" width="100%">
 </p>
 
 ---
@@ -103,7 +103,7 @@ Start autonomous investigations by describing an issue or uploading runtime logs
 Interactive visualization of services, APIs, databases, and relationships within the repository.
 
 <p align="center">
-<img src="screenshots/architecture.png" width="100%">
+<img src="architecture.png" width="100%">
 </p>
 
 ---
@@ -113,7 +113,7 @@ Interactive visualization of services, APIs, databases, and relationships within
 Analyze commits, detect breaking changes, and correlate bugs with repository history.
 
 <p align="center">
-<img src="screenshots/git-intelligence.png" width="100%">
+<img src="intelligence.png" width="100%">
 </p>
 
 ---
@@ -123,7 +123,7 @@ Analyze commits, detect breaking changes, and correlate bugs with repository his
 Inspect Dockerfiles, Compose configurations, and build pipelines for deployment issues.
 
 <p align="center">
-<img src="screenshots/docker-ci.png" width="100%">
+<img src="docker-ci.png" width="100%">
 </p>
 
 ---
@@ -133,7 +133,7 @@ Inspect Dockerfiles, Compose configurations, and build pipelines for deployment 
 Monitor endpoint latency, database performance, and query bottlenecks.
 
 <p align="center">
-<img src="screenshots/api-database.png" width="100%">
+<img src="api-database.png" width="100%">
 </p>
 
 ---
@@ -143,7 +143,7 @@ Monitor endpoint latency, database performance, and query bottlenecks.
 Identify security smells, dead code, and maintainability issues using static analysis.
 
 <p align="center">
-<img src="screenshots/security.png" width="100%">
+<img src="security.png" width="100%">
 </p>
 
 ---
@@ -153,7 +153,7 @@ Identify security smells, dead code, and maintainability issues using static ana
 Evidence-backed reports with confidence scores, affected components, and recommendations.
 
 <p align="center">
-<img src="screenshots/reports.png" width="100%">
+<img src="reports.png" width="100%">
 </p>
 
 ---
@@ -173,7 +173,7 @@ Ask repository-aware questions after project indexing and receive evidence-backe
 Customize AI behavior, themes, explanation depth, and user roles.
 
 <p align="center">
-<img src="screenshots/settings.png" width="100%">
+<img src="settings.png" width="100%">
 </p>
 
 ---
