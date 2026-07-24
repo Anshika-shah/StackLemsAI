@@ -1,158 +1,416 @@
-# StackLens AI 🔍⚡
-> **Autonomous AI-Powered Codebase Investigator & System Topology Profiler**
+<div align="center">
 
-![StackLens AI Banner](https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1400&q=80)
+# 🚀 StackLens AI
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![React 19](https://img.shields.io/badge/React-19.0-61dafb.svg?style=flat-square&logo=react)](https://react.dev/)
-[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4.0-38bdf8.svg?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
-[![Google Gemini API](https://img.shields.io/badge/Google_Gemini_API-3.6_Flash-8e44ad.svg?style=flat-square&logo=google)](https://ai.google.dev/)
-[![Build Status](https://img.shields.io/badge/Build-Passing-emerald.svg?style=flat-square)](#)
+### Autonomous Software Engineering Investigation Platform
 
----
+**Investigate • Analyze • Understand • Resolve**
 
-## 🌟 Overview
+AI-powered Software Engineering Investigation Platform that analyzes repositories, correlates engineering evidence, identifies root causes, and generates explainable investigation reports.
 
-**StackLens AI** is an enterprise-grade autonomous engineering copilot and root-cause investigator. It indexes entire distributed codebases—including AST code structure, REST API endpoints, database schemas, Docker container layers, CI/CD pipelines, and Git commit histories—to pinpoint breaking changes, latency bottlenecks, and security vulnerabilities with **evidence-backed reports**.
-
-Designed with a high-density developer dark mode theme, StackLens AI bridges the gap between high-level architectural overview and deep, line-by-line code diagnostics.
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)]()
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)]()
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)]()
+[![Gemini](https://img.shields.io/badge/Google-Gemini-4285F4?logo=google)]()
+[![License](https://img.shields.io/badge/License-MIT-green)]()
 
 ---
 
-## 🛠️ Key Capabilities & Modules
+🌐 **Live Demo:** https://stacklens-ai.ai.studio
 
-### 1. 🤖 Autonomous 5-Step AI Investigation Studio
-- **Phase 1:** AST & File Tree Indexing
-- **Phase 2:** Log & Error Call Stack Trace Parsing
-- **Phase 3:** Git Commit History & Diff Correlation
-- **Phase 4:** Docker & Environment Configuration Scan
-- **Phase 5:** Root-Cause Synthesis & Patch Diff Generation
-
-### 2. 🕸️ Interactive Service Topology & Data Flow Graph
-- Visual microservices map displaying node health (`healthy`, `warning`, `critical`).
-- Real-time data link status between frontend services, API gateways, microservices, caches (Redis), queues, and databases (PostgreSQL/MongoDB).
-
-### 3. 🌿 Git Intelligence & Breaking Changes Detector
-- Timeline correlation matching bug occurrences directly to author commits and pull requests.
-- Automatic detection of algorithm mismatches (e.g., RS256 vs. HS256 JWT signature errors).
-
-### 4. 🐳 Docker & CI/CD Pipeline Investigator
-- Dockerfile multi-stage layer scanning to optimize image sizes and resolve missing library dependencies.
-- GitHub Actions build step debugging with integrated log output.
-
-### 5. ⚡ API & Database Performance Profiler
-- REST API endpoint response latency tracking, calls/min throughput, and error rate tracking.
-- Database index audit identifying missing B-Tree indexes on high-cardinality tables causing full sequential scans.
-
-### 6. 🛡️ Code Quality & Security Auditor
-- Static analysis detecting dead code, circular dependencies, and hardcoded security parameters.
+</div>
 
 ---
 
-## 🖼️ Visual Highlights & Screenshots
+# 📖 Overview
 
-| Module | Preview | Description |
-| :--- | :--- | :--- |
-| **High Density Dashboard** | ![Dashboard](https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80) | Active case tracker, system latency telemetry, and project health index. |
-| **Topology Graph** | ![Architecture Map](https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80) | Interactive dependency tree tracking service mesh data links. |
-| **Investigation Reports** | ![Investigation Reports](https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=600&q=80) | Evidence-backed root cause reports with Markdown export capabilities. |
+StackLens AI is an AI-powered Software Engineering Investigation Platform that helps developers understand, debug, and analyze software projects through evidence-driven investigation.
+
+Unlike conventional AI coding assistants that generate answers directly from prompts, StackLens AI follows an investigation-first workflow. It gathers engineering evidence from source code, Git history, project architecture, APIs, databases, Docker configurations, CI/CD pipelines, and documentation before using AI reasoning to identify root causes and generate explainable investigation reports.
+
+The platform is designed for developers, software teams, DevOps engineers, and technical leads working on modern software systems.
 
 ---
 
-## 🏗️ System Architecture & Data Flow
+# ✨ Features
+
+## 🔍 AI Investigation Studio
+
+Start autonomous engineering investigations by describing an issue or providing runtime logs.
+
+- Natural language investigation
+- Runtime log analysis
+- Investigation history
+- AI-assisted root cause analysis
+
+---
+
+## 📊 Engineering Dashboard
+
+Monitor engineering health through a centralized dashboard.
+
+- Active investigation cases
+- Project health score
+- Confidence score
+- Evidence sources
+- Impacted files
+- Recommended investigations
+
+---
+
+## 🏗 Architecture & Graph
+
+Visualize project structure and component relationships.
+
+- Service topology
+- API Gateway mapping
+- Microservice connections
+- Database relationships
+- Infrastructure health
+
+---
+
+## 🌳 Git Intelligence
+
+Analyze repository evolution.
+
+- Breaking commits
+- Commit history
+- Author analysis
+- Timeline investigation
+- Code evolution
+
+---
+
+## 🐳 Docker & CI/CD
+
+Inspect deployment pipelines.
+
+- Dockerfile inspection
+- Docker Compose analysis
+- GitHub Actions support
+- Build failure detection
+- Deployment recommendations
+
+---
+
+## 🌐 API & Database Profiler
+
+Monitor backend performance.
+
+- Endpoint latency
+- Error rate monitoring
+- Database inspection
+- Query performance
+- Missing index detection
+
+---
+
+## 🛡 Code Quality & Security
+
+Static engineering analysis.
+
+- Security smells
+- Dead code detection
+- Code quality score
+- Safe delete recommendations
+- Engineering audit
+
+---
+
+## 📑 AI Investigation Reports
+
+Generate evidence-backed reports.
+
+Each report contains:
+
+- Problem summary
+- Evidence collected
+- Root cause
+- Confidence score
+- Impact analysis
+- Recommended fixes
+
+---
+
+## 🤖 Engineering Copilot
+
+Repository-aware AI assistant.
+
+- Project understanding
+- Architecture explanation
+- Authentication tracing
+- API understanding
+- Database explanation
+
+---
+
+## ⚙ Workspace Settings
+
+Customize the platform.
+
+- AI Model Selection
+- Explanation depth
+- Workspace theme
+- User role (RBAC)
+- Personalization
+
+---
+
+# 🧠 Investigation Workflow
 
 ```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                          StackLens AI Workspace                        │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │
-       ┌────────────────────────────┼────────────────────────────┐
-       ▼                            ▼                            ▼
-┌──────────────┐            ┌──────────────┐            ┌──────────────┐
-│  React 19    │            │ Express.js   │            │ Google GenAI │
-│  Frontend    │ ──(REST)──►│ Backend      │ ──(SDK)───►│ Gemini 3.6   │
-│  High Density│            │ Server       │            │ Engine       │
-└──────────────┘            └──────────────┘            └──────────────┘
-       │                            │
-       ▼                            ▼
-┌──────────────┐            ┌──────────────┐
-│ LocalState   │            │ Workspace    │
-│ Storage      │            │ File Scanner │
-└──────────────┘            └──────────────┘
+User Investigation Request
+          │
+          ▼
+Repository Selection
+          │
+          ▼
+Repository Analysis
+          │
+          ▼
+Evidence Collection
+(Code • Git • APIs • Config • Docker • Database)
+          │
+          ▼
+Evidence Validation
+          │
+          ▼
+AI Reasoning Engine (Gemini)
+          │
+          ▼
+Root Cause Analysis
+          │
+          ▼
+Investigation Report
+          │
+          ▼
+Engineering Recommendations
 ```
 
 ---
 
-## 🚀 Quick Start Guide
+# 🖼 Application Preview
 
-### Prerequisites
-- **Node.js**: v20.0.0 or higher
-- **npm**: v10.0.0 or higher
-- **Gemini API Key**: Obtain a key from [Google AI Studio](https://aistudio.google.com/)
+## Dashboard
 
-### 1. Clone & Install Dependencies
+![Dashboard](screenshots/dashboard.png)
+
+---
+
+## AI Investigation Studio
+
+![Investigation Studio](screenshots/investigation-studio.png)
+
+---
+
+## Architecture & Graph
+
+![Architecture](screenshots/architecture.png)
+
+---
+
+## Git Intelligence
+
+![Git Intelligence](screenshots/git-intelligence.png)
+
+---
+
+## Docker & CI/CD
+
+![Docker](screenshots/docker-ci.png)
+
+---
+
+## API & Database Profiler
+
+![API Database](screenshots/api-database.png)
+
+---
+
+## Code Quality & Security
+
+![Security](screenshots/security.png)
+
+---
+
+## Investigation Reports
+
+![Reports](screenshots/reports.png)
+
+---
+
+## Engineering Copilot
+
+![Copilot](screenshots/copilot.png)
+
+---
+
+## Settings & Personalization
+
+![Settings](screenshots/settings.png)
+
+---
+
+# 🏛 System Architecture
+
+```text
+                     User
+                      │
+                      ▼
+            Authentication Layer
+                      │
+                      ▼
+           Repository Connection
+                      │
+                      ▼
+             Repository Scanner
+                      │
+      ┌───────────────┼────────────────┐
+      │               │                │
+      ▼               ▼                ▼
+ Code Analysis   Git Analysis   Config Analysis
+      │               │                │
+      ▼               ▼                ▼
+ API Analysis   Docker & CI/CD   Database Analysis
+      │               │                │
+      └───────────────┼────────────────┘
+                      ▼
+             Evidence Aggregator
+                      │
+                      ▼
+        Gemini AI Reasoning Engine
+                      │
+                      ▼
+         Root Cause Analysis Engine
+                      │
+                      ▼
+      Investigation Report Generator
+```
+
+---
+
+# 💻 Tech Stack
+
+## Frontend
+
+- React
+- TypeScript
+- Tailwind CSS
+- Vite
+- React Router
+- Framer Motion
+
+## Backend
+
+- FastAPI
+- Python
+- JWT Authentication
+- PostgreSQL
+- Redis
+
+## AI
+
+- Google Gemini
+- Prompt Engineering
+- Repository Context Analysis
+
+## DevOps
+
+- Docker
+- GitHub Actions
+- Render
+- Vercel
+
+---
+
+# 📂 Project Structure
+
+```
+StackLensAI
+│
+├── assets/
+├── ss/
+├── src/
+├── README.md
+├── package.json
+├── vite.config.ts
+├── tsconfig.json
+└── .env.example
+```
+
+---
+
+# 🚀 Getting Started
+
+Clone the repository
+
 ```bash
-git clone https://github.com/stacklens/stacklens-ai.git
-cd stacklens-ai
+git clone https://github.com/Anshika-shah/StackLensAI.git
+```
+
+Navigate to the project
+
+```bash
+cd StackLensAI
+```
+
+Install dependencies
+
+```bash
 npm install
 ```
 
-### 2. Configure Environment Variables
-Create a `.env` file in the root directory (refer to `.env.example`):
-```env
-# Google Gemini API Key (Server-side secret)
-GEMINI_API_KEY=your_gemini_api_key_here
+Run the development server
 
-# Server Port
-PORT=3000
-NODE_ENV=development
-```
-
-### 3. Launch Development Server
 ```bash
 npm run dev
 ```
-Open your browser and navigate to `http://localhost:3000`.
 
 ---
 
-## 📜 Available Scripts
+# 🎯 Vision
 
-| Script | Command | Description |
-| :--- | :--- | :--- |
-| `npm run dev` | `tsx server.ts` | Starts the Express + Vite server with live reload. |
-| `npm run build` | `vite build && esbuild ...` | Bundles client & server for production execution. |
-| `npm run start` | `node dist/server.cjs` | Runs the compiled CommonJS server in production mode. |
-| `npm run lint` | `tsc --noEmit` | Runs TypeScript type checking and syntax validation. |
+StackLens AI aims to become an intelligent engineering companion capable of helping developers investigate software systems through evidence-driven AI reasoning instead of prompt-only interactions.
 
 ---
 
-## 🎨 Theme & Workspace Personalization
+# 🛣 Future Roadmap
 
-StackLens AI supports custom visual modes tailored for modern developer environments:
-- **Dark Slate** (High Density Default)
-- **AMOLED Black** (True zero-contrast black mode)
-- **High Contrast Mode**
-- **Light Theme**
-- **Custom Accent Colors:** Indigo, Emerald, Amber, Rose, Violet, Cyan
-
----
-
-## 🔒 Role-Based Access Control (RBAC)
-
-StackLens AI includes built-in role settings:
-- 👑 **Admin**: Full integration, database, and repository connection rights.
-- 🧑‍💻 **Team Lead**: Investigation approval, report publishing, and sharing rights.
-- 🛠️ **Developer**: Codebase scanning, AI chat, and diagnostic access.
+- VS Code Extension
+- Team Collaboration
+- Multi-Agent Investigation
+- Kubernetes Analysis
+- Cloud Infrastructure Investigation
+- Security Vulnerability Scanner
+- Automated Pull Request Suggestions
+- Investigation Knowledge Graph
 
 ---
 
-## 📄 License
+# 🤝 Contributing
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Contributions, ideas, and feature suggestions are welcome.
+
+If you'd like to contribute:
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Open a Pull Request
 
 ---
 
-<p align="center">
-  Built with ❤️ by the <b>StackLens Engineering Team</b> powered by <b>Google Gemini AI</b>
-</p>
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+<div align="center">
+
+### ⭐ If you found this project interesting, consider giving it a star!
+
+Built with ❤️ by **Anshika Shah**
+
+</div>
