@@ -1,7 +1,8 @@
 import React from 'react';
 import { 
   Sparkles, AlertTriangle, ShieldCheck, Activity, Cpu, Database, 
-  GitBranch, CheckCircle2, ArrowUpRight, ArrowRight, Play, Server, Clock, Zap, FileCode, Check
+  GitBranch, CheckCircle2, ArrowUpRight, ArrowRight, Play, Server, Clock, Zap, FileCode, Check,
+  ShieldAlert, Layers, SearchCode, FileText, Award, AlertCircle
 } from 'lucide-react';
 import { ProjectRepository, InvestigationReport } from '../types';
 import { ActiveTab } from './Sidebar';
@@ -32,7 +33,102 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onViewReport,
 }) => {
   return (
-    <div className="p-6 space-y-6 max-w-[1400px] mx-auto">
+    <div className="p-6 space-y-6 max-w-[1400px] mx-auto selection:bg-indigo-500/30">
+      {/* 9 Enterprise Dashboard Metric Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-3">
+        {/* Project Health */}
+        <div className="custom-card p-3 bg-[var(--bg-card)] border-[var(--border-color)] rounded-xl hover:-translate-y-0.5 transition-all">
+          <div className="text-[10px] font-extrabold uppercase text-[var(--text-muted)] tracking-wider">Project Health</div>
+          <div className="text-lg font-black text-emerald-400 mt-1 flex items-center justify-between">
+            <span>{project.healthScore}%</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          </div>
+          <div className="w-full bg-slate-200 dark:bg-slate-800 h-1 rounded-full mt-2 overflow-hidden">
+            <div className="bg-emerald-400 h-full" style={{ width: `${project.healthScore}%` }} />
+          </div>
+        </div>
+
+        {/* Critical Issues */}
+        <div className="custom-card p-3 bg-[var(--bg-card)] border-[var(--border-color)] rounded-xl hover:-translate-y-0.5 transition-all">
+          <div className="text-[10px] font-extrabold uppercase text-[var(--text-muted)] tracking-wider">Critical Issues</div>
+          <div className="text-lg font-black text-rose-400 mt-1 flex items-center justify-between">
+            <span>2</span>
+            <AlertCircle className="w-3.5 h-3.5 text-rose-400" />
+          </div>
+          <div className="text-[9px] text-[var(--text-muted)] mt-1">Requires triage</div>
+        </div>
+
+        {/* Warnings */}
+        <div className="custom-card p-3 bg-[var(--bg-card)] border-[var(--border-color)] rounded-xl hover:-translate-y-0.5 transition-all">
+          <div className="text-[10px] font-extrabold uppercase text-[var(--text-muted)] tracking-wider">Warnings</div>
+          <div className="text-lg font-black text-amber-400 mt-1 flex items-center justify-between">
+            <span>5</span>
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+          </div>
+          <div className="text-[9px] text-[var(--text-muted)] mt-1">Non-blocking</div>
+        </div>
+
+        {/* Services */}
+        <div className="custom-card p-3 bg-[var(--bg-card)] border-[var(--border-color)] rounded-xl hover:-translate-y-0.5 transition-all">
+          <div className="text-[10px] font-extrabold uppercase text-[var(--text-muted)] tracking-wider">Services</div>
+          <div className="text-lg font-black text-indigo-400 mt-1 flex items-center justify-between">
+            <span>{project.stats.servicesCount}</span>
+            <Layers className="w-3.5 h-3.5 text-indigo-400" />
+          </div>
+          <div className="text-[9px] text-[var(--text-muted)] mt-1">Topology active</div>
+        </div>
+
+        {/* APIs */}
+        <div className="custom-card p-3 bg-[var(--bg-card)] border-[var(--border-color)] rounded-xl hover:-translate-y-0.5 transition-all">
+          <div className="text-[10px] font-extrabold uppercase text-[var(--text-muted)] tracking-wider">APIs</div>
+          <div className="text-lg font-black text-purple-400 mt-1 flex items-center justify-between">
+            <span>{project.stats.endpointsCount}</span>
+            <Server className="w-3.5 h-3.5 text-purple-400" />
+          </div>
+          <div className="text-[9px] text-[var(--text-muted)] mt-1">Routes scanned</div>
+        </div>
+
+        {/* Repositories */}
+        <div className="custom-card p-3 bg-[var(--bg-card)] border-[var(--border-color)] rounded-xl hover:-translate-y-0.5 transition-all">
+          <div className="text-[10px] font-extrabold uppercase text-[var(--text-muted)] tracking-wider">Repositories</div>
+          <div className="text-lg font-black text-[var(--text-primary)] mt-1 flex items-center justify-between">
+            <span>3</span>
+            <GitBranch className="w-3.5 h-3.5 text-indigo-400" />
+          </div>
+          <div className="text-[9px] text-[var(--text-muted)] mt-1">Connected</div>
+        </div>
+
+        {/* Investigations */}
+        <div className="custom-card p-3 bg-[var(--bg-card)] border-[var(--border-color)] rounded-xl hover:-translate-y-0.5 transition-all">
+          <div className="text-[10px] font-extrabold uppercase text-[var(--text-muted)] tracking-wider">Investigations</div>
+          <div className="text-lg font-black text-indigo-400 mt-1 flex items-center justify-between">
+            <span>24</span>
+            <SearchCode className="w-3.5 h-3.5 text-indigo-400" />
+          </div>
+          <div className="text-[9px] text-[var(--text-muted)] mt-1">Total run</div>
+        </div>
+
+        {/* Reports */}
+        <div className="custom-card p-3 bg-[var(--bg-card)] border-[var(--border-color)] rounded-xl hover:-translate-y-0.5 transition-all">
+          <div className="text-[10px] font-extrabold uppercase text-[var(--text-muted)] tracking-wider">Reports</div>
+          <div className="text-lg font-black text-purple-400 mt-1 flex items-center justify-between">
+            <span>{recentReports.length}</span>
+            <FileText className="w-3.5 h-3.5 text-purple-400" />
+          </div>
+          <div className="text-[9px] text-[var(--text-muted)] mt-1">Archived</div>
+        </div>
+
+        {/* Confidence Average */}
+        <div className="custom-card p-3 bg-[var(--bg-card)] border-[var(--border-color)] rounded-xl hover:-translate-y-0.5 transition-all">
+          <div className="text-[10px] font-extrabold uppercase text-[var(--text-muted)] tracking-wider">Confidence Avg</div>
+          <div className="text-lg font-black text-emerald-400 mt-1 flex items-center justify-between">
+            <span>95%</span>
+            <Award className="w-3.5 h-3.5 text-emerald-400" />
+          </div>
+          <div className="text-[9px] text-[var(--text-muted)] mt-1">High accuracy</div>
+        </div>
+      </div>
+
       {/* Top Banner & Active Investigation Case */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Active Investigation Case #4812 */}
@@ -47,7 +143,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 Why is Login API returning 401 Unauthorized?
               </h2>
             </div>
-            <div className="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded text-xs font-mono font-bold border border-emerald-500/20 flex items-center gap-1.5">
+            <div className="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-xl text-xs font-mono font-bold border border-emerald-500/20 flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span>CAUSE_IDENTIFIED</span>
             </div>
@@ -55,7 +151,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="sm:col-span-2 space-y-3">
-              <div className="bg-white/5 p-3.5 rounded-lg border-l-4 border-indigo-500 text-xs">
+              <div className="bg-white/5 p-3.5 rounded-xl border-l-4 border-indigo-500 text-xs">
                 <h3 className="font-bold text-white mb-1">Root Cause Summary</h3>
                 <p className="text-slate-300 leading-relaxed">
                   The <code className="font-mono text-[11px] bg-black/40 px-1.5 py-0.5 rounded text-indigo-300">JWT_SECRET</code> environment configuration mandates RS256 algorithm verification in <code className="font-mono text-[11px] text-indigo-300">jwtMiddleware.ts</code>, mismatching the HS256 secret key issued by auth authority.
@@ -63,15 +159,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
 
               <div className="grid grid-cols-3 gap-2 text-xs font-mono">
-                <div className="bg-white/5 p-2.5 rounded-lg border border-white/5">
+                <div className="bg-white/5 p-2.5 rounded-xl border border-white/5">
                   <div className="text-[10px] text-slate-400 uppercase">Confidence Score</div>
                   <div className="text-xl font-bold text-white mt-0.5">96<span className="text-xs opacity-50">%</span></div>
                 </div>
-                <div className="bg-white/5 p-2.5 rounded-lg border border-white/5">
+                <div className="bg-white/5 p-2.5 rounded-xl border border-white/5">
                   <div className="text-[10px] text-slate-400 uppercase">Evidence Sources</div>
                   <div className="text-xl font-bold text-white mt-0.5">07 <span className="text-xs opacity-50">pts</span></div>
                 </div>
-                <div className="bg-white/5 p-2.5 rounded-lg border border-white/5">
+                <div className="bg-white/5 p-2.5 rounded-xl border border-white/5">
                   <div className="text-[10px] text-slate-400 uppercase">Files Impacted</div>
                   <div className="text-xl font-bold text-indigo-400 mt-0.5">03</div>
                 </div>
@@ -79,7 +175,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
 
             {/* Evidence Stream */}
-            <div className="bg-black/30 rounded-lg p-3 border border-white/5 flex flex-col justify-between">
+            <div className="bg-black/30 rounded-xl p-3 border border-white/5 flex flex-col justify-between">
               <div>
                 <div className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-2 flex items-center justify-between">
                   <span>Evidence Stream</span>
@@ -107,7 +203,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
               <button
                 onClick={() => onStartInvestigationWithPrompt('Why is Login API returning 401 Unauthorized for valid credentials?')}
-                className="mt-3 w-full py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded transition text-center"
+                className="mt-3 w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition text-center shadow-md"
               >
                 Inspect Case Details
               </button>
@@ -115,7 +211,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
         </div>
 
-        {/* Health Index Card */}
+        {/* Health Index Gauge Card */}
         <div className="lg:col-span-4 custom-card p-5 bg-[#121217] border border-white/10 flex flex-col items-center justify-center text-center">
           <div className="relative w-32 h-32 flex items-center justify-center">
             <svg className="w-full h-full -rotate-90">
@@ -144,11 +240,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           <div className="mt-4 grid grid-cols-2 gap-2 w-full text-center text-[11px] font-mono border-t border-white/5 pt-3">
-            <div className="bg-white/5 p-1.5 rounded">
+            <div className="bg-white/5 p-1.5 rounded-lg">
               <span className="text-slate-400 text-[10px] block">SERVICES</span>
               <span className="text-white font-bold">{project.stats.servicesCount} Nodes</span>
             </div>
-            <div className="bg-white/5 p-1.5 rounded">
+            <div className="bg-white/5 p-1.5 rounded-lg">
               <span className="text-slate-400 text-[10px] block">ENDPOINTS</span>
               <span className="text-indigo-400 font-bold">{project.stats.endpointsCount} Routes</span>
             </div>
@@ -235,24 +331,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           <div className="my-6 flex items-center justify-center gap-4 sm:gap-6 flex-wrap font-mono text-xs">
-            <div className="p-3 bg-indigo-500/10 border border-indigo-500/30 rounded-lg text-indigo-300">
+            <div className="p-3 bg-indigo-500/10 border border-indigo-500/30 rounded-xl text-indigo-300">
               Frontend Client
             </div>
             <div className="text-slate-500 font-bold">➔</div>
-            <div className="p-3 bg-indigo-600 border border-indigo-400 rounded-lg text-white font-bold ring-4 ring-indigo-500/20 shadow-lg">
+            <div className="p-3 bg-indigo-600 border border-indigo-400 rounded-xl text-white font-bold ring-4 ring-indigo-500/20 shadow-lg">
               API Gateway
             </div>
             <div className="text-slate-500 font-bold">➔</div>
             <div className="flex flex-col gap-2">
-              <div className="p-2.5 bg-rose-500/10 border border-rose-500/40 rounded text-rose-300">
+              <div className="p-2.5 bg-rose-500/10 border border-rose-500/40 rounded-xl text-rose-300">
                 Auth Service (401 Error)
               </div>
-              <div className="p-2.5 bg-amber-500/10 border border-amber-500/40 rounded text-amber-300">
+              <div className="p-2.5 bg-amber-500/10 border border-amber-500/40 rounded-xl text-amber-300">
                 Payment API (Slow Query)
               </div>
             </div>
             <div className="text-slate-500 font-bold">➔</div>
-            <div className="p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg text-purple-300">
+            <div className="p-3 bg-purple-500/10 border border-purple-500/30 rounded-xl text-purple-300">
               PostgreSQL / Redis
             </div>
           </div>
@@ -397,4 +493,3 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     </div>
   );
 };
-

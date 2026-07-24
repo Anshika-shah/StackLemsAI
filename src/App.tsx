@@ -17,9 +17,13 @@ import { CodeQualityView } from './components/CodeQualityView';
 import { ReportsView } from './components/ReportsView';
 import { AiChatView } from './components/AiChatView';
 import { SettingsView } from './components/SettingsView';
+import { ProfileView } from './components/ProfileView';
 import { AuthModal } from './components/AuthModal';
 import { NewRepoModal } from './components/NewRepoModal';
 import { InvestigationDetailModal } from './components/InvestigationDetailModal';
+import { CommandPaletteModal } from './components/CommandPaletteModal';
+import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
+import { HelpModal } from './components/HelpModal';
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<UserProfile>(getStoredUser());
@@ -34,16 +38,37 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
   const [studioInitialQuery, setStudioInitialQuery] = useState('');
 
-  // Modals
+  // Modals & Drawers
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authModalTab, setAuthModalTab] = useState<'login' | 'register'>('login');
   const [showNewRepoModal, setShowNewRepoModal] = useState(false);
   const [selectedReportForModal, setSelectedReportForModal] = useState<InvestigationReport | null>(null);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [showShortcutsModal, setShowShortcutsModal] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   // Apply Theme on load & user preference updates
   useEffect(() => {
     applyTheme(currentUser.preferences.theme, currentUser.preferences.accentColor);
   }, [currentUser.preferences.theme, currentUser.preferences.accentColor]);
+
+  // Global Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette((prev) => !prev);
+      } else if ((e.ctrlKey || e.metaKey) && e.key === 'i') {
+        e.preventDefault();
+        setActiveTab('investigation');
+      } else if (e.key === '?' && !['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName)) {
+        e.preventDefault();
+        setShowShortcutsModal(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Auth Handlers
   const handleUpdateUser = (updatedUser: UserProfile) => {
@@ -81,6 +106,18 @@ export default function App() {
     setActiveTab('investigation');
   };
 
+  const handleMarkNotificationRead = (id: string) => {
+    const updated = notifications.map((n) => (n.id === id ? { ...n, read: true } : n));
+    setNotifications(updated);
+    saveNotifications(updated);
+  };
+
+  const handleMarkAllNotificationsRead = () => {
+    const updated = notifications.map((n) => ({ ...n, read: true }));
+    setNotifications(updated);
+    saveNotifications(updated);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-200 selection:bg-indigo-500/30">
       {/* Top Navigation */}
@@ -94,7 +131,14 @@ export default function App() {
         onOpenAuth={handleOpenAuth}
         onLogout={handleLogout}
         notifications={notifications}
+        onMarkNotificationRead={handleMarkNotificationRead}
+        onMarkAllNotificationsRead={handleMarkAllNotificationsRead}
         onOpenNewRepoModal={() => setShowNewRepoModal(true)}
+        onOpenCommandPalette={() => setShowCommandPalette(true)}
+        onOpenShortcuts={() => setShowShortcutsModal(true)}
+        onOpenHelp={() => setShowHelpModal(true)}
+        onNavigateTab={(tab) => setActiveTab(tab)}
+        onStartInvestigationWithPrompt={handleStartInvestigationWithPrompt}
       />
 
       {/* Main Layout Area */}
@@ -161,6 +205,17 @@ export default function App() {
             />
           )}
 
+          {activeTab === 'profile' && (
+            <ProfileView
+              currentUser={currentUser}
+              onUpdateUser={handleUpdateUser}
+              projects={projects}
+              reports={reports}
+              onSelectProject={(p) => setActiveProject(p)}
+              onViewReport={(rep) => setSelectedReportForModal(rep)}
+            />
+          )}
+
           {activeTab === 'settings' && (
             <SettingsView
               currentUser={currentUser}
@@ -172,7 +227,7 @@ export default function App() {
         </main>
       </div>
 
-      {/* Modals */}
+      {/* Global Modals */}
       <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
@@ -192,6 +247,28 @@ export default function App() {
       <InvestigationDetailModal
         report={selectedReportForModal}
         onClose={() => setSelectedReportForModal(null)}
+      />
+
+      <CommandPaletteModal
+        isOpen={showCommandPalette}
+        onClose={() => setShowCommandPalette(false)}
+        onNavigateTab={(tab) => setActiveTab(tab)}
+        onStartInvestigation={handleStartInvestigationWithPrompt}
+        projects={projects}
+        activeProject={activeProject}
+        onSelectProject={(p) => setActiveProject(p)}
+        recentReports={reports}
+        onViewReport={(rep) => setSelectedReportForModal(rep)}
+      />
+
+      <KeyboardShortcutsModal
+        isOpen={showShortcutsModal}
+        onClose={() => setShowShortcutsModal(false)}
+      />
+
+      <HelpModal
+        isOpen={showHelpModal}
+        onClose={() => setShowHelpModal(false)}
       />
     </div>
   );

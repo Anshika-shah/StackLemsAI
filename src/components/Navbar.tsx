@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { 
   Search, Shield, Bell, User, Sparkles, Moon, Sun, 
-  ChevronDown, Check, GitBranch, Terminal, RefreshCw, LogIn, LogOut, UserPlus, UserCheck
+  ChevronDown, Check, GitBranch, Terminal, RefreshCw, LogIn, LogOut, UserPlus, UserCheck,
+  FolderGit2, Key, Sliders, Palette, Building, Keyboard, HelpCircle, ArrowRight,
+  CheckCircle2, AlertTriangle, ShieldAlert
 } from 'lucide-react';
 import { UserProfile, ProjectRepository, NotificationItem } from '../types';
+import { ActiveTab } from './Sidebar';
 
 interface NavbarProps {
   currentUser: UserProfile;
@@ -15,7 +18,14 @@ interface NavbarProps {
   onOpenAuth: (initialTab?: 'login' | 'register') => void;
   onLogout: () => void;
   notifications: NotificationItem[];
+  onMarkNotificationRead: (id: string) => void;
+  onMarkAllNotificationsRead: () => void;
   onOpenNewRepoModal: () => void;
+  onOpenCommandPalette: () => void;
+  onOpenShortcuts: () => void;
+  onOpenHelp: () => void;
+  onNavigateTab: (tab: ActiveTab) => void;
+  onStartInvestigationWithPrompt?: (query: string) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -28,7 +38,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAuth,
   onLogout,
   notifications,
+  onMarkNotificationRead,
+  onMarkAllNotificationsRead,
   onOpenNewRepoModal,
+  onOpenCommandPalette,
+  onOpenShortcuts,
+  onOpenHelp,
+  onNavigateTab,
+  onStartInvestigationWithPrompt,
 }) => {
   const [showProjMenu, setShowProjMenu] = useState(false);
   const [showNotifMenu, setShowNotifMenu] = useState(false);
@@ -36,12 +53,39 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
+  // Recently opened repositories tracking
+  const [recentRepoIds, setRecentRepoIds] = useState<string[]>(() => {
+    return [activeProject.id, ...projects.filter((p) => p.id !== activeProject.id).map((p) => p.id)];
+  });
+
+  const handleSwitchProject = (proj: ProjectRepository) => {
+    onSelectProject(proj);
+    setRecentRepoIds((prev) => [proj.id, ...prev.filter((id) => id !== proj.id)]);
+    setShowProjMenu(false);
+  };
+
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case 'investigation':
+        return <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />;
+      case 'security':
+        return <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />;
+      case 'build':
+        return <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />;
+      default:
+        return <Bell className="w-4 h-4 text-indigo-400 shrink-0" />;
+    }
+  };
+
   return (
-    <header className="h-16 border-b border-[var(--border-color)] bg-[var(--bg-surface)] px-4 flex items-center justify-between sticky top-0 z-30 shadow-xs">
-      {/* Brand & Project Selector */}
+    <header className="h-16 border-b border-[var(--border-color)] bg-[var(--bg-surface)] px-4 flex items-center justify-between sticky top-0 z-30 shadow-xs selection:bg-indigo-500/30">
+      {/* Brand & Smart Repository Selector */}
       <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-2.5 cursor-pointer select-none">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-emerald-500 flex items-center justify-center shadow-md text-white font-black text-lg tracking-wider">
+        <div 
+          onClick={() => onNavigateTab('dashboard')} 
+          className="flex items-center space-x-2.5 cursor-pointer select-none group"
+        >
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-emerald-500 flex items-center justify-center shadow-md text-white font-black text-lg tracking-wider group-hover:scale-105 transition-transform">
             S
           </div>
           <div>
@@ -56,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         <div className="h-6 w-px bg-[var(--border-color)] hidden md:block" />
 
-        {/* Project Selector Dropdown */}
+        {/* Smart Repository Selector Dropdown */}
         <div className="relative">
           <button
             onClick={() => {
@@ -64,45 +108,84 @@ export const Navbar: React.FC<NavbarProps> = ({
               setShowNotifMenu(false);
               setShowUserMenu(false);
             }}
-            className="flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-input)] hover:bg-slate-200 dark:hover:bg-slate-800 transition text-sm font-medium"
+            className="flex items-center space-x-2 px-3 py-1.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-input)] hover:border-indigo-500/50 transition text-xs font-semibold"
           >
-            <GitBranch className="w-4 h-4 text-indigo-500" />
-            <span className="max-w-[160px] truncate">{activeProject.name}</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <GitBranch className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="max-w-[140px] truncate">{activeProject.name}</span>
+            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20 hidden sm:inline">
+              Indexed
+            </span>
             <ChevronDown className="w-3.5 h-3.5 text-[var(--text-muted)]" />
           </button>
 
           {showProjMenu && (
-            <div className="absolute left-0 mt-2 w-72 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-xl py-2 z-50">
-              <div className="px-3 py-1.5 text-xs font-semibold uppercase text-[var(--text-muted)] tracking-wider">
-                Select Connected Repository
-              </div>
-              {projects.map((proj) => (
-                <button
-                  key={proj.id}
-                  onClick={() => {
-                    onSelectProject(proj);
-                    setShowProjMenu(false);
-                  }}
-                  className={`w-full px-3 py-2 text-left text-sm flex items-center justify-between hover:bg-indigo-500/10 transition ${
-                    proj.id === activeProject.id ? 'font-semibold text-indigo-500' : ''
-                  }`}
-                >
-                  <div className="truncate">
-                    <div className="truncate">{proj.name}</div>
-                    <div className="text-xs text-[var(--text-muted)]">{proj.stats.filesCount} files • Health: {proj.healthScore}%</div>
+            <div className="absolute left-0 mt-2 w-80 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl py-2 z-50 animate-fadeIn divide-y divide-[var(--border-color)]">
+              {/* Current Active Repository */}
+              <div className="p-3 bg-indigo-500/5">
+                <div className="text-[10px] font-extrabold uppercase text-[var(--text-muted)] tracking-wider mb-1.5">
+                  Current Repository
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-bold text-xs text-[var(--text-primary)] flex items-center space-x-1.5">
+                      <GitBranch className="w-3.5 h-3.5 text-indigo-400" />
+                      <span>{activeProject.name}</span>
+                    </div>
+                    <div className="text-[10px] text-[var(--text-muted)] mt-0.5">
+                      {activeProject.stats.filesCount} files • Health: <span className="font-bold text-emerald-400">{activeProject.healthScore}%</span>
+                    </div>
                   </div>
-                  {proj.id === activeProject.id && <Check className="w-4 h-4 text-indigo-500 shrink-0" />}
-                </button>
-              ))}
-              <div className="border-t border-[var(--border-color)] mt-2 pt-2 px-2">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
+                    Indexed
+                  </span>
+                </div>
+              </div>
+
+              {/* Recently Opened Repositories */}
+              <div className="p-2 space-y-1">
+                <div className="px-2 pt-1 text-[10px] font-extrabold uppercase text-[var(--text-muted)] tracking-wider">
+                  Recent Repositories
+                </div>
+                {projects.map((proj) => {
+                  const isCurrent = proj.id === activeProject.id;
+                  return (
+                    <button
+                      key={proj.id}
+                      onClick={() => handleSwitchProject(proj)}
+                      className={`w-full p-2 rounded-xl text-left text-xs flex items-center justify-between transition ${
+                        isCurrent ? 'bg-indigo-600/10 font-bold text-indigo-400' : 'hover:bg-indigo-500/10 text-[var(--text-primary)]'
+                      }`}
+                    >
+                      <div className="truncate space-y-0.5">
+                        <div className="truncate flex items-center space-x-2">
+                          <span className="truncate">{proj.name}</span>
+                          <span className="text-[9px] font-mono px-1 rounded bg-slate-200 dark:bg-slate-800 text-[var(--text-muted)]">
+                            {proj.languages[0]}
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-[var(--text-muted)] flex items-center space-x-2">
+                          <span>Score: {proj.healthScore}%</span>
+                          <span>•</span>
+                          <span>Synced 10m ago</span>
+                        </div>
+                      </div>
+                      {isCurrent && <Check className="w-4 h-4 text-indigo-400 shrink-0 ml-2" />}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Connect Repository Trigger */}
+              <div className="pt-2 px-2 pb-1">
                 <button
                   onClick={() => {
                     setShowProjMenu(false);
                     onOpenNewRepoModal();
                   }}
-                  className="w-full text-xs font-medium text-center text-indigo-500 hover:text-indigo-600 py-1 rounded hover:bg-indigo-500/10 transition"
+                  className="w-full py-2 px-3 rounded-xl text-xs font-bold text-indigo-400 hover:text-white bg-indigo-500/10 hover:bg-indigo-600 transition flex items-center justify-center space-x-2"
                 >
-                  + Connect / Import Repository
+                  <span>+ Connect Repository</span>
                 </button>
               </div>
             </div>
@@ -110,17 +193,43 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Global Action & Search */}
-      <div className="flex items-center space-x-3">
+      {/* Center Search Trigger (Command Palette Trigger) */}
+      <div className="hidden lg:flex items-center flex-1 max-w-xs mx-6">
+        <button
+          onClick={onOpenCommandPalette}
+          className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-input)] hover:border-indigo-500/50 transition text-xs text-[var(--text-muted)]"
+        >
+          <div className="flex items-center space-x-2">
+            <Search className="w-3.5 h-3.5 text-indigo-400" />
+            <span>Search or type command...</span>
+          </div>
+          <kbd className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-[10px] font-mono font-bold">
+            Ctrl K
+          </kbd>
+        </button>
+      </div>
+
+      {/* Global Actions: Investigate, Notifications, User Menu */}
+      <div className="flex items-center space-x-2.5">
+        {/* Mobile Search Button */}
+        <button
+          onClick={onOpenCommandPalette}
+          className="lg:hidden p-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-input)] hover:border-indigo-500/50 transition text-[var(--text-primary)]"
+          title="Command Palette (Ctrl + K)"
+        >
+          <Search className="w-4 h-4 text-indigo-400" />
+        </button>
+
+        {/* Investigate Issue Button */}
         <button
           onClick={onOpenNewInvestigation}
-          className="flex items-center space-x-2 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-sm shadow-sm transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+          className="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs shadow-md transition-all transform hover:scale-[1.02] active:scale-[0.98]"
         >
-          <Sparkles className="w-4 h-4 animate-pulse" />
+          <Sparkles className="w-3.5 h-3.5 animate-pulse" />
           <span className="hidden sm:inline">Investigate Issue</span>
         </button>
 
-        {/* Notifications */}
+        {/* Notification Center */}
         <div className="relative">
           <button
             onClick={() => {
@@ -128,38 +237,97 @@ export const Navbar: React.FC<NavbarProps> = ({
               setShowProjMenu(false);
               setShowUserMenu(false);
             }}
-            className="p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-input)] hover:bg-slate-200 dark:hover:bg-slate-800 transition relative text-[var(--text-primary)]"
+            className="p-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-input)] hover:border-indigo-500/50 transition relative text-[var(--text-primary)]"
+            title="Notifications"
           >
-            <Bell className="w-4 h-4" />
+            <Bell className="w-4 h-4 text-[var(--text-primary)]" />
             {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-extrabold rounded-full flex items-center justify-center animate-pulse shadow-sm">
                 {unreadCount}
               </span>
             )}
           </button>
 
           {showNotifMenu && (
-            <div className="absolute right-0 mt-2 w-80 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-xl py-2 z-50">
-              <div className="px-3 py-1.5 border-b border-[var(--border-color)] flex items-center justify-between">
-                <span className="font-semibold text-xs uppercase tracking-wider text-[var(--text-muted)]">
-                  Notifications
-                </span>
-                <span className="text-xs text-indigo-500 cursor-pointer">Mark all read</span>
+            <div className="absolute right-0 mt-2 w-88 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl py-2 z-50 animate-fadeIn">
+              <div className="px-4 py-2 border-b border-[var(--border-color)] flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Bell className="w-3.5 h-3.5 text-indigo-400" />
+                  <span className="font-extrabold text-xs uppercase tracking-wider text-[var(--text-primary)]">
+                    Notifications Center
+                  </span>
+                </div>
+                {unreadCount > 0 && (
+                  <button
+                    onClick={onMarkAllNotificationsRead}
+                    className="text-[11px] font-bold text-indigo-400 hover:underline"
+                  >
+                    Mark All Read
+                  </button>
+                )}
               </div>
-              <div className="max-h-64 overflow-y-auto divide-y divide-[var(--border-color)]">
+
+              <div className="max-h-80 overflow-y-auto divide-y divide-[var(--border-color)]">
                 {notifications.map((n) => (
-                  <div key={n.id} className="p-3 hover:bg-indigo-500/5 transition text-xs">
-                    <div className="font-semibold text-[var(--text-primary)]">{n.title}</div>
-                    <div className="text-[var(--text-muted)] mt-0.5">{n.message}</div>
-                    <div className="text-[10px] text-slate-400 mt-1">{n.timestamp}</div>
+                  <div
+                    key={n.id}
+                    onClick={() => onMarkNotificationRead(n.id)}
+                    className={`p-3.5 hover:bg-indigo-500/5 transition text-xs space-y-1.5 cursor-pointer ${
+                      n.read ? 'opacity-60 bg-[var(--bg-surface)]' : 'bg-indigo-500/5'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center space-x-2">
+                        {getNotificationIcon(n.type)}
+                        <span className="font-bold text-[var(--text-primary)]">{n.title}</span>
+                      </div>
+                      <span className="text-[10px] font-mono text-[var(--text-muted)] shrink-0">{n.timestamp}</span>
+                    </div>
+
+                    <p className="text-[var(--text-muted)] text-[11px] leading-relaxed pl-6">
+                      {n.message}
+                    </p>
+
+                    <div className="pl-6 pt-1 flex items-center justify-between">
+                      <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400">
+                        {n.type}
+                      </span>
+
+                      {onStartInvestigationWithPrompt && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onMarkNotificationRead(n.id);
+                            onStartInvestigationWithPrompt(`Investigate notification alert: ${n.title}`);
+                            setShowNotifMenu(false);
+                          }}
+                          className="text-[11px] font-bold text-indigo-400 hover:text-indigo-300 flex items-center space-x-1"
+                        >
+                          <span>Investigate</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 ))}
+              </div>
+
+              <div className="p-2 border-t border-[var(--border-color)] text-center">
+                <button
+                  onClick={() => {
+                    setShowNotifMenu(false);
+                    onNavigateTab('reports');
+                  }}
+                  className="text-xs font-bold text-indigo-400 hover:underline"
+                >
+                  View All Notifications & Reports →
+                </button>
               </div>
             </div>
           )}
         </div>
 
-        {/* User Role Profile & Auth Menu */}
+        {/* User Profile Dropdown */}
         <div className="relative">
           {isLoggedIn ? (
             <button
@@ -168,10 +336,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setShowProjMenu(false);
                 setShowNotifMenu(false);
               }}
-              className="flex items-center space-x-2 pl-2 pr-2.5 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-input)] hover:bg-slate-200 dark:hover:bg-slate-800 transition text-sm"
+              className="flex items-center space-x-2 pl-2 pr-2.5 py-1.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-input)] hover:border-indigo-500/50 transition text-xs font-semibold"
             >
               <img src={currentUser.avatar} alt={currentUser.name} className="w-6 h-6 rounded-full object-cover ring-1 ring-indigo-500" />
-              <span className="font-medium max-w-[100px] truncate hidden md:inline">{currentUser.name}</span>
+              <span className="font-bold max-w-[90px] truncate hidden md:inline">{currentUser.name}</span>
               <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-400 hidden lg:inline">
                 {currentUser.role.replace('_', ' ')}
               </span>
@@ -180,53 +348,122 @@ export const Navbar: React.FC<NavbarProps> = ({
           ) : (
             <button
               onClick={() => onOpenAuth('login')}
-              className="flex items-center space-x-2 px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-sm transition"
+              className="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition"
             >
               <LogIn className="w-3.5 h-3.5" />
-              <span>Sign In / Register</span>
+              <span>Sign In</span>
             </button>
           )}
 
-          {/* User Dropdown Menu */}
+          {/* User Profile Dropdown Menu */}
           {showUserMenu && isLoggedIn && (
-            <div className="absolute right-0 mt-2 w-64 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl py-2 z-50 animate-fadeIn">
+            <div className="absolute right-0 mt-2 w-64 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl py-2 z-50 animate-fadeIn text-xs">
               {/* Profile Summary Header */}
-              <div className="px-3.5 py-2.5 border-b border-[var(--border-color)] space-y-1">
+              <div 
+                onClick={() => {
+                  setShowUserMenu(false);
+                  onNavigateTab('profile');
+                }}
+                className="px-3.5 py-2.5 border-b border-[var(--border-color)] space-y-1 cursor-pointer hover:bg-indigo-500/5 transition"
+              >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-[var(--text-primary)] truncate">{currentUser.name}</span>
-                  <span className="flex items-center space-x-1 text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                  <span className="font-bold text-[var(--text-primary)] truncate">{currentUser.name}</span>
+                  <span className="flex items-center space-x-1 text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     <span>Active</span>
                   </span>
                 </div>
                 <div className="text-[11px] text-[var(--text-muted)] truncate">{currentUser.email}</div>
-                <div className="text-[10px] text-indigo-400 font-mono uppercase tracking-wider font-semibold">
-                  Role: {currentUser.role.replace('_', ' ')}
-                </div>
               </div>
 
-              {/* Action Links */}
+              {/* Enterprise Dropdown Items */}
               <div className="py-1">
                 <button
                   onClick={() => {
                     setShowUserMenu(false);
-                    onOpenAuth('login');
+                    onNavigateTab('profile');
                   }}
-                  className="w-full px-3.5 py-2 text-left text-xs font-medium text-[var(--text-primary)] hover:bg-indigo-500/10 flex items-center space-x-2.5 transition"
+                  className="w-full px-3.5 py-2 text-left hover:bg-indigo-500/10 flex items-center space-x-2.5 font-medium transition"
                 >
-                  <UserCheck className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>Switch Account / Sign In</span>
+                  <User className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>👤 My Profile</span>
                 </button>
 
                 <button
                   onClick={() => {
                     setShowUserMenu(false);
-                    onOpenAuth('register');
+                    onOpenNewRepoModal();
                   }}
-                  className="w-full px-3.5 py-2 text-left text-xs font-medium text-[var(--text-primary)] hover:bg-purple-500/10 flex items-center space-x-2.5 transition"
+                  className="w-full px-3.5 py-2 text-left hover:bg-indigo-500/10 flex items-center space-x-2.5 font-medium transition"
                 >
-                  <UserPlus className="w-3.5 h-3.5 text-purple-400" />
-                  <span>Register New Account</span>
+                  <FolderGit2 className="w-3.5 h-3.5 text-purple-400" />
+                  <span>📂 Connected Repositories</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    onNavigateTab('settings');
+                  }}
+                  className="w-full px-3.5 py-2 text-left hover:bg-indigo-500/10 flex items-center space-x-2.5 font-medium transition"
+                >
+                  <Key className="w-3.5 h-3.5 text-amber-400" />
+                  <span>🔑 API Keys</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    onNavigateTab('settings');
+                  }}
+                  className="w-full px-3.5 py-2 text-left hover:bg-indigo-500/10 flex items-center space-x-2.5 font-medium transition"
+                >
+                  <Bell className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>🔔 Notification Preferences</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    onNavigateTab('settings');
+                  }}
+                  className="w-full px-3.5 py-2 text-left hover:bg-indigo-500/10 flex items-center space-x-2.5 font-medium transition"
+                >
+                  <Palette className="w-3.5 h-3.5 text-rose-400" />
+                  <span>🎨 Theme & Personalization</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    onNavigateTab('settings');
+                  }}
+                  className="w-full px-3.5 py-2 text-left hover:bg-indigo-500/10 flex items-center space-x-2.5 font-medium transition"
+                >
+                  <Building className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>🏢 Workspace Settings</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    onOpenShortcuts();
+                  }}
+                  className="w-full px-3.5 py-2 text-left hover:bg-indigo-500/10 flex items-center space-x-2.5 font-medium transition"
+                >
+                  <Keyboard className="w-3.5 h-3.5 text-purple-400" />
+                  <span>⌨ Keyboard Shortcuts</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    onOpenHelp();
+                  }}
+                  className="w-full px-3.5 py-2 text-left hover:bg-indigo-500/10 flex items-center space-x-2.5 font-medium transition"
+                >
+                  <HelpCircle className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>❓ Help & Documentation</span>
                 </button>
               </div>
 
@@ -237,10 +474,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setShowUserMenu(false);
                     onLogout();
                   }}
-                  className="w-full px-3.5 py-2 text-left text-xs font-bold text-rose-400 hover:bg-rose-500/10 flex items-center space-x-2.5 transition"
+                  className="w-full px-3.5 py-2 text-left font-bold text-rose-400 hover:bg-rose-500/10 flex items-center space-x-2.5 transition"
                 >
                   <LogOut className="w-3.5 h-3.5 text-rose-400" />
-                  <span>Log Out</span>
+                  <span>🚪 Logout</span>
                 </button>
               </div>
             </div>
@@ -250,4 +487,3 @@ export const Navbar: React.FC<NavbarProps> = ({
     </header>
   );
 };
-
