@@ -157,6 +157,36 @@ Customize the platform.
 
 ---
 
+## 🛠️ Key Capabilities & Modules
+
+### 1. 🤖 Autonomous 5-Step AI Investigation Studio
+- **Phase 1:** AST & File Tree Indexing
+- **Phase 2:** Log & Error Call Stack Trace Parsing
+- **Phase 3:** Git Commit History & Diff Correlation
+- **Phase 4:** Docker & Environment Configuration Scan
+- **Phase 5:** Root-Cause Synthesis & Patch Diff Generation
+
+### 2. 🕸️ Interactive Service Topology & Data Flow Graph
+- Visual microservices map displaying node health (`healthy`, `warning`, `critical`).
+- Real-time data link status between frontend services, API gateways, microservices, caches (Redis), queues, and databases (PostgreSQL/MongoDB).
+
+### 3. 🌿 Git Intelligence & Breaking Changes Detector
+- Timeline correlation matching bug occurrences directly to author commits and pull requests.
+- Automatic detection of algorithm mismatches (e.g., RS256 vs. HS256 JWT signature errors).
+
+### 4. 🐳 Docker & CI/CD Pipeline Investigator
+- Dockerfile multi-stage layer scanning to optimize image sizes and resolve missing library dependencies.
+- GitHub Actions build step debugging with integrated log output.
+
+### 5. ⚡ API & Database Performance Profiler
+- REST API endpoint response latency tracking, calls/min throughput, and error rate tracking.
+- Database index audit identifying missing B-Tree indexes on high-cardinality tables causing full sequential scans.
+
+### 6. 🛡️ Code Quality & Security Auditor
+- Static analysis detecting dead code, circular dependencies, and hardcoded security parameters.
+
+---
+
 # 🧠 Investigation Workflow
 
 ```text
@@ -194,61 +224,61 @@ Engineering Recommendations
 
 ## Dashboard
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](ss/dashboard.png)
 
 ---
 
 ## AI Investigation Studio
 
-![Investigation Studio](screenshots/investigation-studio.png)
+![Investigation Studio](ss/investigation-studio.png)
 
 ---
 
 ## Architecture & Graph
 
-![Architecture](screenshots/architecture.png)
+![Architecture](ss/architecture.png)
 
 ---
 
 ## Git Intelligence
 
-![Git Intelligence](screenshots/git-intelligence.png)
+![Git Intelligence](ss/git-intelligence.png)
 
 ---
 
 ## Docker & CI/CD
 
-![Docker](screenshots/docker-ci.png)
+![Docker](sts/docker-ci.png)
 
 ---
 
 ## API & Database Profiler
 
-![API Database](screenshots/api-database.png)
+![API Database](ss/api-database.png)
 
 ---
 
 ## Code Quality & Security
 
-![Security](screenshots/security.png)
+![Security](ss/security.png)
 
 ---
 
 ## Investigation Reports
 
-![Reports](screenshots/reports.png)
+![Reports](ss/reports.png)
 
 ---
 
 ## Engineering Copilot
 
-![Copilot](screenshots/copilot.png)
+![Copilot](ss/copilot.png)
 
 ---
 
 ## Settings & Personalization
 
-![Settings](screenshots/settings.png)
+![Settings](ss/settings.png)
 
 ---
 
@@ -286,6 +316,28 @@ Engineering Recommendations
                       │
                       ▼
       Investigation Report Generator
+```
+
+## 🏗️  Data Flow
+
+```text
+┌────────────────────────────────────────────────────────────────────────┐
+│                          StackLens AI Workspace                        │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │
+       ┌────────────────────────────┼────────────────────────────┐
+       ▼                            ▼                            ▼
+┌──────────────┐            ┌──────────────┐            ┌──────────────┐
+│  React 19    │            │ Express.js   │            │ Google GenAI │
+│  Frontend    │ ──(REST)──►│ Backend      │ ──(SDK)───►│ Gemini 3.6   │
+│  High Density│            │ Server       │            │ Engine       │
+└──────────────┘            └──────────────┘            └──────────────┘
+       │                            │
+       ▼                            ▼
+┌──────────────┐            ┌──────────────┐
+│ LocalState   │            │ Workspace    │
+│ Storage      │            │ File Scanner │
+└──────────────┘            └──────────────┘
 ```
 
 ---
